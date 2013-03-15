@@ -21,13 +21,12 @@ namespace Expression
 
         public override float Evaluate(params KeyValue<string, float>[] variables)
         {
-            float result = 0;
-            foreach (KeyValue<string, float> variable in variables)
-                if (variable.Key == this.Name)
-                    result =  variable.Value;
-            return result;
-
-            //return variables.Find(variable => variable.Key == this.Name).Value;
+            return variables.Find(variable => variable.Key == this.Name).Value;
         }
+        public override Abstract Derive(string variable)
+        {
+            return variable == this.Name ? 1 : 0;
+        }
+
     }
 }

@@ -18,5 +18,10 @@ namespace Expression
         {
             return this.Left.ToString(this.Precedence - 1) + " " + this.Symbol + " " + this.Right.ToString(this.Precedence);
         }
+        public override Abstract Derive(string variable)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

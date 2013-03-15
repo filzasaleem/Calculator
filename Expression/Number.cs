@@ -20,10 +20,14 @@ namespace Expression
         {
             return this.Value.ToString();
         }
-
-        public override float Evaluate()
+        public override float Evaluate(params Kean.Core.KeyValue<string, float>[] variables)
         {
             return this.Value;
         }
+        public override Abstract Derive(string variable)
+        {
+            return 0f;
+        }
+
     }
 }
