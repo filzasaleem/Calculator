@@ -26,5 +26,9 @@ namespace Expression
        {
            throw new NotImplementedException();
        }
+       public override Abstract Simplify()
+       {
+           throw new NotImplementedException();
+       }
     }
 }

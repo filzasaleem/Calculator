@@ -20,6 +20,19 @@ namespace Expression
         {
             return new Cosine(this.Argument) * this.Argument.Derive(variable);
         }
+        public override Abstract Simplify()
+        {
+            return new Sine(this.Argument.Simplify());
+        }
+        public override bool Equals(Abstract other)
+        {
+            return other is Sine && this.Argument == (other as Sine).Argument;
+        }
+        public override int GetHashCode()
+        {
+            return this.Argument.GetHashCode() ^ typeof(Sine).GetHashCode() ;
+        }
+
        
     }
 }

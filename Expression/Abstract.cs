@@ -4,10 +4,12 @@ using Kean.Core.Extension;
 
 namespace Expression
 {
-    public abstract class Abstract
+    public abstract class Abstract :
+        IEquatable<Abstract>
     {
+       
         protected abstract int Precedence { get; }
-
+        //public abstract bool ContainsVariables { get; }
         public float Evaluate()
         {
             return this.Evaluate(new KeyValue<string, float>[0]);
@@ -15,6 +17,7 @@ namespace Expression
 
         public abstract float Evaluate(params KeyValue<string, float>[] variables);
         public abstract Abstract Derive(string variable);
+        public abstract Abstract Simplify();
 
         internal string ToString(int precedence)
         {
@@ -23,35 +26,61 @@ namespace Expression
                 result = "(" + result + ")";
             return result;
         }
+        #region Equality
+        public override bool Equals(object other)
+        {
+            return this.Equals(other as Abstract);
+        }
+        public abstract bool Equals(Abstract other);
+
+        public static bool operator ==(Abstract left, Abstract right)
+        {
+            return left.Same(right) || left.NotNull() && left.Equals(right);
+        }
+        public static bool operator !=(Abstract left, Abstract right)
+        {
+            return !left.Same(right) && (left.IsNull() || !left.Equals(right));
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        #endregion
 
         public static Subtraction operator -(Abstract left, Abstract right)
         {
-            return new Subtraction() { Left = left, Right = right };
+            return new Subtraction(left, right);
         }
         public static Addition operator +(Abstract left, Abstract right)
         {
-            return new Addition() { Left = left, Right = right };
+            return new Addition(left, right);
         }
         public static Multiplication operator *(Abstract left, Abstract right)
         {
-            return new Multiplication() { Left = left, Right = right };
+            return new Multiplication(left, right);
         }
         public static Division operator /(Abstract left, Abstract right)
         {
-            return new Division() { Left = left, Right = right };
+            return new Division(left, right);
         }
         public static Modulo operator %(Abstract left, Abstract right)
         {
-            return new Modulo() { Left = left, Right = right };
+            return new Modulo(left, right);
         }
         public static Power operator ^(Abstract left, Abstract right)
         {
-            return new Power() { Left = left, Right = right };
+            return new Power(left, right);
         }
+        public static Negation operator -(Abstract argument)
+        {
+            return new Negation(argument);
+        }
+
         public static implicit operator Abstract(float value)
         {
             return new Number(value);
         }
+        
         
 
         public static explicit operator Abstract(string expression)
@@ -59,6 +88,5 @@ namespace Expression
             // add parsing here
             return null;
         }
-
     }
 }

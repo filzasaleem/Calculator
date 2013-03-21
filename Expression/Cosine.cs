@@ -21,6 +21,19 @@ namespace Expression
        {
            return -(new Sine(this.Argument) * this.Argument.Derive(variable));
        }
+       public override Abstract Simplify()
+       {
+           return new Sine(this.Argument.Simplify());
+       }
+       public override bool Equals(Abstract other)
+       {
+           return other is Cosine && this.Argument == (other as Cosine).Argument;
+       }
+       public override int GetHashCode()
+       {
+           return this.Argument.GetHashCode() ^ typeof(Cosine).GetHashCode();
+       }
+
        
     }
 }

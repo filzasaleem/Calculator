@@ -4,12 +4,12 @@ using Kean.Core.Extension;
 
 namespace Expression
 {
-   public class Variable:
-        Abstract 
+    public class Variable :
+         Abstract
     {
-         protected override int Precedence { get { return int.MaxValue; } }
+        protected override int Precedence { get { return int.MaxValue; } }
 
-        public string Name { get; set; }
+        public string Name { get; private set; }
         public Variable(string name)
         {
             this.Name = name;
@@ -27,6 +27,18 @@ namespace Expression
         {
             return variable == this.Name ? 1 : 0;
         }
-
+        public override Abstract Simplify()
+        {
+            return this;
+        }
+        public override bool Equals(Abstract other)
+        {
+            return other is Variable && this.Name == (other as Variable).Name;
+        }
+        public override int GetHashCode()
+        {
+            return this.Name.GetHashCode();
+        }
     }
+
 }

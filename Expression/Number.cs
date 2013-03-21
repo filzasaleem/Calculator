@@ -11,7 +11,7 @@ namespace Expression
     {
         protected override int Precedence { get { return int.MaxValue; } }
 
-        public float Value { get; set; }
+        public float Value { get; private set; }
         public Number(float value)
         {
             this.Value = value;
@@ -28,6 +28,17 @@ namespace Expression
         {
             return 0f;
         }
-
+        public override Abstract Simplify()
+        {
+            return this;
+        }
+        public override bool Equals(Abstract other)
+        {
+            return other is Number && this.Value == (other as Number).Value;
+        }
+        public override int GetHashCode()
+        {
+            return this.Value.GetHashCode();
+        }
     }
 }
