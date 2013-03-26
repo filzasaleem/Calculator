@@ -23,15 +23,25 @@ namespace Expression
         }
         public override Abstract Simplify()
         {
-            Abstract result;
+            Abstract result=0;
             Abstract left = this.Left.Simplify();
             Abstract right = this.Right.Simplify();
             if (left == right)
                 result = 1;
-            else if(left is Number && (left as Number).Value == 0)
+            else if (left is Number && (left as Number).Value == 0)
                 result = 0;
-            else 
-            result = this;
+            else if ((left is Negation) && (left as Negation).Argument == right)
+                result = -1;
+            else if( left is Multiplication)
+            {
+                if ((left as Multiplication).Right == right)
+                result = (left as Multiplication).Left;
+                else if((left as Multiplication).Left == right)
+                    result = (left as Multiplication).Right;
+            }
+            else
+                result = this;
+
             return result;
         }
         public override bool Equals(Abstract other)

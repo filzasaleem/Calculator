@@ -32,6 +32,8 @@ namespace Expression
                result = 1;
            else if(right is Number &&( right as Number).Value == 1)
                result = left;
+           else if((right is Number) && (left is Number ))
+               result = Kean.Math.Single.Power((right as Number).Value , (left as Number).Value);
            else
                result = this;
            return result;

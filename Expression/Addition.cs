@@ -31,7 +31,12 @@ namespace Expression
             {
                 bool r;
                 if (r = term.Item2 is Number)
-                   number += ( term.Item2 as Number).Value ;
+                {
+                    if( term.Item1 == -1)
+                       number -= (term.Item2 as Number).Value;
+                    else
+                       number += (term.Item2 as Number).Value;
+                }
                 return r;
             });
             result = number;
@@ -43,18 +48,29 @@ namespace Expression
                 terms.Remove(term =>
                 {
                     bool r;
-                    if (r = (term.Item2 == next))
+                    if (r = ((term.Item2).Equals(next)))
                         repitition += term.Item1;
+
                     return r;
                 });
-
-                if (repitition == -1)
-                    result -= next;
-                else if (repitition == 1)
-                    result += next;
+                if (result == 0)
+                {
+                    if (repitition == -1)
+                        result = next;
+                    else if (repitition == 1)
+                        result = next;
+                    else
+                        result = repitition * next;
+                }
                 else
-                    result += repitition * next; 
-                
+                {
+                    if (repitition == -1)
+                        result -= next;
+                    else if (repitition == 1)
+                        result += next;
+                    else
+                        result += repitition * next;
+                }
             }
             //Abstract result = this.Left + this.Right;
             //if (result is Addition)
@@ -87,18 +103,30 @@ namespace Expression
                 result.Add(this.CollectTerms((current as Subtraction).Left));
                 result.Add(this.CollectTerms((current as Subtraction).Right).Map(term => Tuple.Create(-term.Item1, term.Item2)));
             }
+            //else if (current is Division)
+            //{
+            //    result.Add(this.CollectTerms((current as Division).Left));
+            //    result.Add(this.CollectTerms((current as Division).Right));
+            //}
+
             else
             {
+                
                 current = current.Simplify();
                 if (current is Multiplication && (current as Multiplication).Left is Number)
                     result.Add(Tuple.Create(((current as Multiplication).Left as Number).Value, (current as Multiplication).Right));
-                //else if (current is Multiplication && (current as Multiplication).Left is Negation)
-                //{ 
-                //   float temp = -((current as Multiplication).Left as Negation).Argument;
-                //    result.Add(Tuple.Create(temp, (current as Multiplication).Right));
-                //}
+                else if (current is Division)
+                {
+                    current = current.Simplify();
+                    result.Add(Tuple.Create(1f, current));
+                }
                 else if (current is Negation)
                     result.Add(Tuple.Create(-1f, (current as Negation).Argument));
+                else if (current is Power)
+                {
+                    current = current.Simplify();
+                    result.Add(Tuple.Create(-1f, current));
+                }
                 else
                     result.Add(Tuple.Create(1f, current));
             }

@@ -33,6 +33,9 @@
     <Reference Include="Kean.Core">
       <HintPath>..\packages\Kean.Core.0.2.0.757\lib\net40-Client\Kean.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Kean.Core.Collection">
+      <HintPath>..\packages\Kean.Core.Collection.0.2.0.757\lib\net40-Client\Kean.Core.Collection.dll</HintPath>
+    </Reference>
     <Reference Include="Kean.Core.Error">
       <HintPath>..\packages\Kean.Core.Error.0.2.0.757\lib\net40-Client\Kean.Core.Error.dll</HintPath>
     </Reference>
