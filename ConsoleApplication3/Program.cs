@@ -31,7 +31,7 @@ namespace ConsoleApplication3
             //Console.WriteLine(expression6 + " = " + expression6.Evaluate(KeyValue.Create("x", 3.1415f), KeyValue.Create("y", 4.2f),KeyValue.Create("z",5.2f),KeyValue.Create("i",30f)));
             //Console.WriteLine(expression7);
             Expression.Abstract expression11 = new Expression.Variable("x");
-            Expression.Abstract expression12 = (Expression.Abstract)5f + 6f + (expression11 + expression11 + -expression11) + 2 * -expression11 - expression11/expression11 + new Expression.Variable("filza") + (2*expression11) / expression11 ;
+            Expression.Abstract expression12 = (Expression.Abstract)5f + 6f + expression11 + expression11 + -expression11 + 2 * -expression11 - expression11/expression11 + new Expression.Variable("filza") + (2*expression11) / expression11 ;
             Expression.Abstract expression13 = expression11 + expression11 +expression9 + expression9 + (expression11 ^ 0f) + ((Expression.Abstract) 2f ^ 2f);
             Console.WriteLine('\n');
             Console.WriteLine(expression12);
