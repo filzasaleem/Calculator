@@ -25,16 +25,39 @@ namespace Expression
             Abstract result;
             Abstract left = this.Left.Simplify();
             Abstract right = this.Right.Simplify();
-            if(left == right )
-                result = (Abstract)(left ^ 2);
-            else if (left is Number && (left as Number).Value == 1)
-                result = right ;
-            else if(right is Number && (right as Number).Value == 1)
-                result = left;
-            else if((left is Number && (left as Number).Value == 0)||(right is Number && (right as Number).Value == 0))
-                result = 0;
-            else 
-                result = this ;
+            if (right is Number)
+            {
+                if (left is Number)
+                {
+                    result = (Right as Number).Value * (Left as Number).Value;
+                }
+                else if ((right as Number).Value == 0)
+                    result = 0;
+                else if ((right as Number).Value == 1)
+                    result = left;
+                else
+                {
+                    Abstract temprorary = right;
+                    left = right;
+                    right = temprorary;
+                    result = left * right;
+                }
+            }
+            else
+            {
+                if (left == right)
+                    result = (Abstract)(left ^ 2);
+                else if (left is Number && (left as Number).Value == 1)
+                    result = right;
+                else if ((left is Number && (left as Number).Value == 0))
+                    result = 0;
+                else if (right is Negation)
+                    result = (-left).Simplify() * (right as Negation).Argument;
+                else if ((left is Negation) && (right is Negation))
+                    result = (left as Negation).Argument * (right as Negation).Argument;
+                else
+                    result = this;
+            }
             return result;
         }
         public override bool Equals(Abstract other)

@@ -18,7 +18,12 @@ namespace Expression
         }
         public override Abstract Simplify()
         {
-            return new Negation (this.Argument.Simplify());
+            Abstract result = this.Argument.Simplify();
+            if (result is Number)
+                result = -(result as Number).Value ;
+            else
+                result = new Negation (result);
+            return result;
         }
         public override bool Equals(Abstract other)
         {
