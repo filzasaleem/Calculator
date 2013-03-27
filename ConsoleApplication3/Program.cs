@@ -8,6 +8,10 @@ namespace ConsoleApplication3
     {
         static void Main(string[] args)
         {
+      //      Expression.Test.Simplify.Test();
+            Expression.Test.All.Test();
+
+
             Expression.Abstract f = new Expression.Variable("x") ^ 2f;
             Console.WriteLine("d/dx(" + f + ") = " + f.Derive("x"));
             Expression.Abstract l = new Expression.Sine(new Expression.Variable("x"));
@@ -32,7 +36,7 @@ namespace ConsoleApplication3
             //Console.WriteLine(expression7);
             Expression.Abstract expression11 = new Expression.Variable("x");
             Expression.Abstract expression12 = (Expression.Abstract)5f + 6f + expression11 + expression11 + -expression11 + 2 * -expression11 - expression11/expression11 + new Expression.Variable("filza") + (2*expression11) / expression11 ;
-            Expression.Abstract expression13 = expression11 + expression11 +expression9 + expression9 + (expression11 ^ 0f) + ((Expression.Abstract) 2f ^ 2f);
+            Expression.Abstract expression13 = expression11 + expression11 +expression9 + expression9 + (5*expression11) % (2*expression11) + (expression11 ^ 0f) + ((Expression.Abstract) 2f ^ 2f);
             Console.WriteLine('\n');
             Console.WriteLine(expression12);
             Console.WriteLine(expression12.Simplify());
