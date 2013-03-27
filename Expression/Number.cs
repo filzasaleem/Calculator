@@ -34,7 +34,7 @@ namespace Expression
         }
         public override bool Equals(Abstract other)
         {
-            return other is Number && this.Value == (other as Number).Value;
+            return other is Number && Kean.Math.Single.Absolute(this.Value - (other as Number).Value) <= 0.000001f;
         }
         public override int GetHashCode()
         {

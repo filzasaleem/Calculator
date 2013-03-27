@@ -32,13 +32,17 @@ namespace Expression
                 result = 0;
             else if ((left is Negation) && (left as Negation).Argument == right)
                 result = -1;
-            else if( left is Multiplication)
+            else if (left is Multiplication)
             {
                 if ((left as Multiplication).Right == right)
-                result = (left as Multiplication).Left;
-                else if((left as Multiplication).Left == right)
+                    result = (left as Multiplication).Left;
+                else if ((left as Multiplication).Left == right)
                     result = (left as Multiplication).Right;
+                else if ((left as Multiplication).Right is Number && (left as Multiplication).Left is Number && right is Number)
+                    result = (((left as Multiplication).Right as Number).Value * ((left as Multiplication).Left as Number).Value) / right;
             }
+            else if (left is Number && right is Number)
+                result = (left as Number).Value / (right as Number).Value;
             else
                 result = this;
 

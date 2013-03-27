@@ -29,7 +29,7 @@ namespace Expression
             {
                 if (left is Number)
                 {
-                    result = (Right as Number).Value * (Left as Number).Value;
+                    result = (right as Number).Value * (left as Number).Value;
                 }
                 else if ((right as Number).Value == 0)
                     result = 0;

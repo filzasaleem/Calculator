@@ -29,6 +29,12 @@ namespace Expression
                 result = 0;
             else if (left is Number && (left as Number).Value == 0)
                 result = 0;
+            else if ((left is Number) && (right is Number))
+                result = (left as Number).Value % (right as Number).Value;
+            else if ((left is Multiplication) && (left as Multiplication).Right == right)
+                result = 0;
+            else if (((left as Multiplication).Right == (right as Multiplication).Right) && ((left as Multiplication).Left is Number) && ((right as Multiplication).Left is Number))
+                result = (((left as Multiplication).Left as Number).Value % ((right as Multiplication).Left as Number).Value) * (right as Multiplication).Right;
             else
                 result = this;
             return result;

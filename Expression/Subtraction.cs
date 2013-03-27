@@ -27,10 +27,12 @@ namespace Expression
             Abstract right = this.Right.Simplify();
             if (left == right)
                 result = 0;
-            else if(left is Number &&(left as Number).Value == 0)
-                result = right ;
-            else if(right is Number &&(right as Number).Value == 0)
+            else if (left is Number && (left as Number).Value == 0)
+                result = right;
+            else if (right is Number && (right as Number).Value == 0)
                 result = left;
+            else if (left is Number && right is Number)
+                result = (left as Number).Value - (right as Number).Value;
             else
                 result = this;
             return result;
