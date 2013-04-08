@@ -56,7 +56,7 @@ namespace Expression
                 if (result == 0)
                 {
                     if (repitition == -1)
-                        result = next;
+                        result = -next;
                     else if (repitition == 1)
                         result = next;
                     else
@@ -125,7 +125,7 @@ namespace Expression
                 else if (current is Power)
                 {
                     current = current.Simplify();
-                    result.Add(Tuple.Create(-1f, current));
+                    result.Add(Tuple.Create(1f, current));
                 }
                 else
                     result.Add(Tuple.Create(1f, current));

@@ -23,30 +23,31 @@ namespace Expression
         }
         public override Abstract Simplify()
         {
-            Abstract result=0;
+           // Abstract result=0;
             Abstract left = this.Left.Simplify();
             Abstract right = this.Right.Simplify();
-            if (left == right)
-                result = 1;
-            else if (left is Number && (left as Number).Value == 0)
-                result = 0;
-            else if ((left is Negation) && (left as Negation).Argument == right)
-                result = -1;
-            else if (left is Multiplication)
-            {
-                if ((left as Multiplication).Right == right)
-                    result = (left as Multiplication).Left;
-                else if ((left as Multiplication).Left == right)
-                    result = (left as Multiplication).Right;
-                else if ((left as Multiplication).Right is Number && (left as Multiplication).Left is Number && right is Number)
-                    result = (((left as Multiplication).Right as Number).Value * ((left as Multiplication).Left as Number).Value) / right;
-            }
-            else if (left is Number && right is Number)
-                result = (left as Number).Value / (right as Number).Value;
-            else
-                result = this;
+			return (left * (right^-1)).Simplify();
+			//if (left == right)
+			//	result = 1;
+			//else if (left is Number && (left as Number).Value == 0)
+			//	result = 0;
+			//else if ((left is Negation) && (left as Negation).Argument == right)
+			//	result = -1;
+			//else if (left is Multiplication)
+			//{
+			//	if ((left as Multiplication).Right == right)
+			//		result = (left as Multiplication).Left;
+			//	else if ((left as Multiplication).Left == right)
+			//		result = (left as Multiplication).Right;
+			//	else if ((left as Multiplication).Right is Number && (left as Multiplication).Left is Number && right is Number)
+			//		result = (((left as Multiplication).Right as Number).Value * ((left as Multiplication).Left as Number).Value) / right;
+			//}
+			//else if (left is Number && right is Number)
+			//	result = (left as Number).Value / (right as Number).Value;
+			//else
+			//	result = this;
 
-            return result;
+			//return result;
         }
         public override bool Equals(Abstract other)
         {

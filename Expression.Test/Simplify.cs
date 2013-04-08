@@ -59,8 +59,12 @@ namespace Expression.Test
         [Test]
         public void SineConstants()
         {
-            Expression.Abstract before = new Expression.Sine(Kean.Math.Single.Pi / 2f);
-            Verify(before.Evaluate(), Is.EqualTo(1f));
+            Expression.Abstract exp0 = new Expression.Variable("x");
+            Expression.Abstract exp1 = new Expression.Variable("y");
+            Expression.Abstract befor = new Expression.Sine(exp0 + exp1 + exp0); 
+            //Expression.Abstract before = new Expression.Sine(Kean.Math.Single.Pi / 2f);
+            Expression.Abstract after = new Expression.Sine(exp0);
+            Verify(befor.Simplify(), Is.EqualTo(after));
 
         }
     }

@@ -6,7 +6,8 @@ namespace Expression.Test
     {
         public static void Test()
         {
-            Expression.Test.Simplify.Test();
+           // Expression.Test.Simplify.Test();
+            Expression.Test.SimplifyVariables.Test();
         }
     }
 }

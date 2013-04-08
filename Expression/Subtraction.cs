@@ -22,20 +22,23 @@ namespace Expression
         }
         public override Abstract Simplify()
         {
-            Abstract result;
-            Abstract left = this.Left.Simplify();
-            Abstract right = this.Right.Simplify();
-            if (left == right)
-                result = 0;
-            else if (left is Number && (left as Number).Value == 0)
-                result = right;
-            else if (right is Number && (right as Number).Value == 0)
-                result = left;
-            else if (left is Number && right is Number)
-                result = (left as Number).Value - (right as Number).Value;
-            else
-                result = this;
-            return result;
+			Abstract left = this.Left.Simplify();
+			Abstract right = this.Right.Simplify();
+            return (left + -right).Simplify();
+            //Abstract result;
+            //Abstract left = this.Left.Simplify();
+            //Abstract right = this.Right.Simplify();
+            //if (left == right)
+            //    result = 0;
+            //else if (left is Number && (left as Number).Value == 0)
+            //    result = right;
+            //else if (right is Number && (right as Number).Value == 0)
+            //    result = left;
+            //else if (left is Number && right is Number)
+            //    result = (left as Number).Value - (right as Number).Value;
+            //else
+            //    result = this;
+            //return result;
         }
         public override bool Equals(Abstract other)
         {
