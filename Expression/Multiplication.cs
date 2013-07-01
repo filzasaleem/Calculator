@@ -101,10 +101,17 @@ namespace Expression
 				//	result.Add(Tuple.Create(-1f, (current as Negation).Argument));
 				 if (current is Power)
 				{
-					current = current.Simplify();
-					Abstract variable = (current as Power).Left;
-					float value = ((current as Power).Right as Number).Value;
-					result.Add(Tuple.Create(value, variable));
+					if ((current as Power).Left is Number && (current as Power).Right is Number)
+					{
+						current = current.Simplify();
+						result.Add(Tuple.Create(1f, current));
+					}
+					else
+					{
+						Abstract variable = (current as Power).Left;
+						float value = ((current as Power).Right as Number).Value;
+						result.Add(Tuple.Create(value, variable));
+					}
 				}
 				else
 					result.Add(Tuple.Create(1f, current));

@@ -80,13 +80,15 @@ namespace Expression
         {
             return new Number(value);
         }
-        
-        
-
+		public static implicit operator Abstract(char value)
+        {
+            string temp = value.ToString();
+            return new Variable(temp);
+        }
         public static explicit operator Abstract(string expression)
         {
-            // add parsing here
-            return null;
+			return new Parser().Parse(expression);
         }
+		
     }
 }

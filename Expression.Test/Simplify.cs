@@ -13,10 +13,16 @@ namespace Expression.Test
             this.Run(
                 this.AddingConstants,
                 this.SubstractingConstants,
-                this.MultiplyingConstants,
+                //this.MultiplyingConstants,
                 this.DividingConstants,
                 this.SineConstants,
-                this.PowerOfConstants 
+                this.PowerOfConstants,
+ 				this.Parsing1,
+				this.Parsing2,
+				this.Parsing3,
+				//this.Parsing4,
+				//this.Parsing5,
+				this.Parsing6
                 );
         }
         [Test]
@@ -63,9 +69,48 @@ namespace Expression.Test
             Expression.Abstract exp1 = new Expression.Variable("y");
             Expression.Abstract befor = new Expression.Sine(exp0 + exp1 + exp0); 
             //Expression.Abstract before = new Expression.Sine(Kean.Math.Single.Pi / 2f);
-            Expression.Abstract after = new Expression.Sine(exp0);
+            Expression.Abstract after = new Expression.Sine(2 * exp0 + exp1);
             Verify(befor.Simplify(), Is.EqualTo(after));
 
         }
+		[Test]
+		public void Parsing1()
+		{
+			Expression.Abstract expression = (Expression.Abstract)"2+3";
+			Verify(expression, Is.EqualTo((Abstract)2 + 3 ));
+		}
+		public void Parsing2()
+		{
+			Expression.Abstract expression = (Expression.Abstract)"x+y";
+			Expression.Abstract variable1 = new Expression.Variable("x");
+			Expression.Abstract variable2 = new Expression.Variable("y");
+			Verify(expression, Is.EqualTo(variable1 + variable2));
+		}
+		public void Parsing3()
+		{
+			Expression.Abstract expression = (Expression.Abstract)"x+2";
+			Expression.Abstract variable1 = new Expression.Variable("x");
+			Verify(expression, Is.EqualTo(variable1 + 2));
+		}
+		public void Parsing4()
+		{
+			Expression.Abstract expression = (Expression.Abstract)"x+2*x-3";
+			Expression.Abstract variable1 = new Expression.Variable("x");
+			Verify(expression, Is.EqualTo(variable1 + 2*variable1-3));
+		}
+		public void Parsing5()
+		{
+			Expression.Abstract expression = (Expression.Abstract)"x+2*x/3-y";
+			Expression.Abstract variable1 = new Expression.Variable("x");
+			Expression.Abstract variable2 = new Expression.Variable("y");
+			Verify(expression, Is.EqualTo(variable1 + 2 * variable1 / 3-variable2));
+		}
+		public void Parsing6()
+		{
+			Expression.Abstract expression = (Expression.Abstract)"x+2*8/3-y^2";
+			Expression.Abstract variable1 = new Expression.Variable("x");
+			Expression.Abstract variable2 = new Expression.Variable("y");
+			Verify(expression, Is.EqualTo(variable1 + (Abstract)2 * 8 / 3 - variable2^2));
+		}
     }
 }
