@@ -62,6 +62,17 @@
     <Compile Include="Sine.cs" />
     <Compile Include="Subtraction.cs" />
     <Compile Include="Negation.cs" />
+    <Compile Include="Token\Abstract.cs" />
+    <Compile Include="Token\Addition.cs" />
+    <Compile Include="Token\BinaryOperator.cs" />
+    <Compile Include="Token\Division.cs" />
+    <Compile Include="Token\Multiplication.cs" />
+    <Compile Include="Token\Number.cs" />
+    <Compile Include="Token\LeftParanthesis.cs" />
+    <Compile Include="Token\Power.cs" />
+    <Compile Include="Token\RightParanthesis.cs" />
+    <Compile Include="Token\Subtraction.cs" />
+    <Compile Include="Token\Variable.cs" />
     <Compile Include="UnaryOperator.cs" />
     <Compile Include="Variable.cs" />
   </ItemGroup>

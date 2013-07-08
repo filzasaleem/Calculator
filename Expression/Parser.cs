@@ -10,127 +10,95 @@ namespace Expression
 	    public Parser()
 	    {
 		}
-		public Abstract Result { get; set; }
-		Collection.IQueue<object> arguments;
-		char token = '\0' ;
+		Collection.IStack<Abstract> stack = new Collection.Stack<Abstract>();
+		Token.Abstract token = null ;
+		Token.Abstract operator1 = null;
+		Token.Abstract operator2 = null;
 		public Abstract Parse(string expression)
 		{
-			this.arguments  = new Tokenizer().Tokenize(expression);
-			this.Result = ParseExpression(arguments);
-			return this.Result;
-
+			return this.Parse(Token.Abstract.Tokenize(expression));
 		}
-		public Abstract ParseExpression(Collection.IQueue<object> arguments)
-		
+		Abstract Parse(Collection.IQueue<Token.Abstract> arguments)
 		{
-			Abstract expression1;
-			Abstract expression2;
-			expression1 = ParseFactor(arguments);
-			if (arguments.Count != 0)
+			Abstract left;
+			Abstract right;
+			ParseNumber(arguments);
+			if (arguments.Count > 0 && this.operator1 == null)
 			{
-				if(token == '\0')
-				   token = (char)arguments.Dequeue();
-				if (token == '+')
-				{
-					expression2 = ParseExpression(arguments);
-					expression1 += expression2;
-					if (token == '+')
-					  token = '\0';
-				}
-				else if (token == '-')
-				{
-					expression2 = ParseExpression(arguments);
-					expression1 -= expression2;
-					if (token == '-')
-					  token = '\0';
-				}
+				this.token = arguments.Dequeue();
+				this.operator1 = this.token;
+				this.token = null;
 			}
-			return expression1;
-		}
-		public Abstract ParseFactor(Collection.IQueue<object> arguments)
-		{
-			Abstract expression1;
-			Abstract expression2;
-			expression1 = ParseValue(arguments);
-			if (arguments.Count != 0)
+			ParseNumber(arguments);
+			if (arguments.Count > 0  && this.operator2 == null)
 			{
-				if (token == '\0')
-					token = (char)arguments.Dequeue();
-				if (token == '*')
-				{
-					expression2 = ParseFactor(arguments);
-					expression1 *= expression2;
-					if(token == '*')
-					  token = '\0';
-				}
-				else if(token == '/')
-				{
-					expression2 = ParseFactor(arguments);
-					expression1 /= expression2;
-					if (token == '/')
-					  token = '\0';
-				}
-				else if (token == '%')
-				{
-					expression2 = ParseFactor(arguments);
-					expression1 %= expression2;
-					if (token == '%')
-						token = '\0';
-				}
-				else if (token == '^')
-				{
-					expression2 = ParseFactor(arguments);
-					expression1 ^= expression2;
-					if (token == '^')
-						token = '\0';
-				}
+				if (this.token == null)
+					this.token = arguments.Dequeue();
+				this.operator2 = this.token;
+				this.token = null;
 			}
-			return expression1;
-		}
-		public Abstract ParseValue(Collection.IQueue<object> arguments)
-		{
-			Abstract expression1 = null;
-			if(arguments.Count != 0)
+			ParseNumber(arguments);
+			if (operator1 != null && operator2 != null && operator1.Precedence < this.operator2.Precedence)
 			{
-				token = (char)arguments.Dequeue();
-				if (char.IsDigit(token))
-				{
-					expression1 = (Abstract)float.Parse(token.ToString());
-					token = '\0';
-					return expression1;
-				}
-				else if (char.IsLetter(token))
-				{
-					expression1 = (Abstract)token;
-					token = '\0';
-					return expression1;
-				}
-				else if (token == '(')
-				{
-					expression1 = ParseExpression(arguments);
-					token = '\0';
-					return expression1;
-				}
-				else if (token == ')')
-				{
-					token = '\0';
-					expression1 = token;
-				}
+				right = this.stack.Pop();
+				left = this.stack.Pop();
+				this.stack.Push((this.operator2 as Token.BinaryOperator).Create(left, right));
+				this.operator2 = null;
+				Parse(arguments);
 			}
-			return expression1;
-		}
-		class Tokenizer
-		{
-		    Collection.IQueue<object> arguments;
-			public Collection.IQueue<object> Tokenize(string expression)
+			else if (operator1 != null && operator2 != null  && operator1.Precedence > this.operator2.Precedence)
 			{
-				this.arguments = new Collection.Queue<object>();
-				foreach (char c in expression)
+				Abstract temp = this.stack.Pop();
+				right = this.stack.Pop();
+				left = this.stack.Pop();
+				this.stack.Push((this.operator1 as Token.BinaryOperator).Create(left, right));
+				this.stack.Push(temp);
+				operator1 = this.operator2;
+				this.operator2 = null;
+				Parse(arguments);
+			}
+			else if (operator1 != null && operator2 != null && operator1.Precedence == this.operator2.Precedence)
+			{
+				Abstract temp = this.stack.Pop();
+				right = this.stack.Pop();
+				left = this.stack.Pop();
+				this.stack.Push((this.operator1 as Token.BinaryOperator).Create(left, right));
+				this.stack.Push(temp);
+				this.operator2 = null;
+				Parse(arguments);
+			}
+			else if (operator1 != null && this.operator2 == null)
+			{
+				right = this.stack.Pop();
+				left = this.stack.Pop();
+				this.stack.Push((this.operator1 as Token.BinaryOperator).Create(left, right));
+				operator1 = null;
+			}
+		   return this.stack.Peek();
+		}
+		public void ParseNumber(Collection.IQueue<Token.Abstract> arguments)
+		{
+			if (arguments.Count > 0 && this.token == null)
+			{
+				this.token = arguments.Dequeue();
+				if (this.token is Token.Number)
 				{
-					if (char.IsDigit(c) || char.IsLetter(c) || c == '-' || c == '*' || c == '/' || c == '%' || c == '+' || c == '(' || c == ')' || c == '^')
-						this.arguments.Enqueue(c);
+					Abstract number = new Expression.Number((this.token as Token.Number).Value);
+					this.stack.Push(number);
+					this.token = null;
 				}
-				return this.arguments;
+				else if (this.token is Token.Variable)
+				{
+					Abstract name = new Expression.Variable((this.token as Token.Variable).Name);
+					this.stack.Push(name);
+					this.token = null;
+				}
+				if (this.token is Token.BinaryOperator && this.operator2 == null)
+				{
+					this.operator2 = this.token;
+					this.token = null;
+					ParseNumber(arguments);
+				}
 			}
 		}
 	}

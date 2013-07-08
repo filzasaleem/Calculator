@@ -9,7 +9,7 @@ namespace Expression
     public class Addition :
         BinaryOperator
     {
-        protected override int Precedence { get { return 4; } }
+        protected override int Precedence { get { return 5; } }
         protected override string Symbol { get { return "+"; } }
         public Addition(Abstract left, Abstract right) :
            base(left, right)

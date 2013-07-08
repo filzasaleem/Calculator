@@ -7,7 +7,7 @@ namespace Expression
     public class Subtraction:
        BinaryOperator
     {
-        protected override int Precedence { get { return 5; } }
+        protected override int Precedence { get { return 4; } }
         protected override string Symbol { get { return "-"; } }
          public Subtraction(Abstract left, Abstract right) : 
            base(left,right)
