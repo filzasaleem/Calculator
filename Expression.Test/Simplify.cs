@@ -17,15 +17,16 @@ namespace Expression.Test
 				this.DividingConstants,
 				this.SineConstants,
 				this.PowerOfConstants,
-				this.Parsing1,
-				this.Parsing2,
-				this.Parsing3,
-				this.Parsing4,
-				this.Parsing5,
-				this.Parsing6,
-				this.Parsing7,
-				this.Parsing8,
-				this.Parsing9
+				//this.Parsing1,
+				//this.Parsing2,
+				//this.Parsing3,
+				//this.Parsing4,
+				//this.Parsing5,
+				//this.Parsing6,
+				//this.Parsing7,
+				//this.Parsing8,
+				//this.Parsing9,
+				this.Parsing10
 				);
 		}
 		[Test]
@@ -141,6 +142,14 @@ namespace Expression.Test
 			Expression.Abstract variable1 = new Expression.Variable("x");
 			Expression.Abstract variable2 = new Expression.Variable("y");
 			Expression.Abstract correct = -variable1 + -(Abstract)2 + variable2 / 3 - variable2;
+			Verify(expression, Is.EqualTo(correct));
+		}
+		public void Parsing10()
+		{
+			Expression.Abstract expression = (Expression.Abstract)"x+(2+y/3)-y";
+			Expression.Abstract variable1 = new Expression.Variable("x");
+			Expression.Abstract variable2 = new Expression.Variable("y");
+			Expression.Abstract correct = variable1 + ((Abstract)2 + variable2 / 3) - variable2;
 			Verify(expression, Is.EqualTo(correct));
 		}
 	}

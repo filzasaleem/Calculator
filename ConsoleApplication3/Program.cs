@@ -6,8 +6,23 @@ namespace ConsoleApplication3
 {
     class Program
     {
+
+		//static void Simple(int a, ref int c)
+		//{
+		//	int b = a + 1;
+		//	Console.WriteLine("before: " + a + " " + b + " " + c);
+		//	c = c + 1;
+		//	if (a > 0)
+		//		Program.Simple(a - 1, ref c);
+		//	Console.WriteLine("after:  " + a + " " + b + " " + c);
+		//}
+
         static void Main(string[] args)
         {
+			//int counter = 10;
+			//Program.Simple(5, ref counter);
+			//Console.WriteLine(counter);
+
       //      Expression.Test.Simplify.Test();
             Expression.Test.All.Test();
 

@@ -61,6 +61,13 @@ namespace Expression.Token
 								arguments.Enqueue(new Token.Power());
 								flag = true;
 								break;
+							case '(':
+								arguments.Enqueue(new Token.LeftParanthesis());
+								flag = true;
+								break;
+							case ')':
+								arguments.Enqueue(new Token.RightParanthesis());
+								break;
 						}
 				}
 			}

@@ -19,29 +19,33 @@ namespace Expression
 		{
 			Abstract left;
 			Abstract right;
-			Token.Abstract operator2 = null; 
+			Token.Abstract operator2 = null;
 			if (operator1.IsNull())
 				operator1 = this.PushOnStack(operator1, arguments);
 			if (operator2.IsNull())
 				operator2 = this.PushOnStack(operator2, arguments);
-			if (arguments.Count > 0)
-				operator2 = this.PushOnStack(operator2, arguments);
+			operator2 = this.PushOnStack(operator2, arguments);
 			right = this.stack.Pop();
 			left = this.stack.Pop();
 			if (operator1.NotNull())
 			{
 				if (operator2.NotNull())
 				{
-					if (operator1.Precedence < operator2.Precedence)
+					if (operator2 is Token.RightParanthesis)
 						this.stack.Push((operator2 as Token.BinaryOperator).Create(left, right));
-					else if (operator1.Precedence > operator2.Precedence || operator1.Precedence == operator2.Precedence)
+					else
 					{
-						Abstract temp = this.stack.Pop();
-				        this.stack.Push((operator1 as Token.BinaryOperator).Create(temp, left));
-				        this.stack.Push(right);
-						operator1 = operator2;
+						if (operator1.Precedence < operator2.Precedence)
+							this.stack.Push((operator2 as Token.BinaryOperator).Create(left, right));
+						else if (operator1.Precedence > operator2.Precedence || operator1.Precedence == operator2.Precedence)
+						{
+							Abstract temp = this.stack.Pop();
+							this.stack.Push((operator1 as Token.BinaryOperator).Create(temp, left));
+							this.stack.Push(right);
+							operator1 = operator2;
+						}
+						this.Parse(operator1, arguments);
 					}
-					this.Parse(operator1, arguments);
 				}
 				else
 				{
@@ -66,7 +70,7 @@ namespace Expression
 					this.stack.Push(new Expression.Variable((arguments.Dequeue() as Token.Variable).Name));
 					result = PushOnStack(@operator, arguments);
 				}
-				else if (arguments.Peek() is Token.BinaryOperator && @operator.IsNull())
+				else if ((arguments.Peek() is Token.BinaryOperator || arguments.Peek() is Token.RightParanthesis) && @operator.IsNull())
 					result = arguments.Dequeue();
 				else if (arguments.Peek() is Token.UnaryOperator)
 				{
@@ -78,6 +82,11 @@ namespace Expression
 						value = new Expression.Variable((arguments.Dequeue() as Token.Variable).Name);
 					this.stack.Push(new Expression.Negation(value));
 					result = PushOnStack(@operator, arguments);
+				}
+				else if (arguments.Peek() is Token.LeftParanthesis)
+				{
+					arguments.Dequeue();
+					this.Parse(null, arguments);
 				}
 			}
 			return result;
