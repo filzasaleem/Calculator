@@ -21,16 +21,11 @@ namespace Expression
 			Abstract right;
 			Token.Abstract operator2 = null; 
 			if (operator1.IsNull())
-				operator1 = this.PushOnStack(arguments);
+				operator1 = this.PushOnStack(operator1, arguments);
 			if (operator2.IsNull())
-				operator2 = this.PushOnStack(arguments);
+				operator2 = this.PushOnStack(operator2, arguments);
 			if (arguments.Count > 0)
-			{
-				if (arguments.Peek() is Token.Number)
-					this.stack.Push(new Expression.Number((arguments.Dequeue() as Token.Number).Value));
-				else if (arguments.Peek() is Token.Variable)
-					this.stack.Push(new Expression.Variable((arguments.Dequeue() as Token.Variable).Name));
-			}
+				operator2 = this.PushOnStack(operator2, arguments);
 			right = this.stack.Pop();
 			left = this.stack.Pop();
 			if (operator1.NotNull())
@@ -56,23 +51,34 @@ namespace Expression
 			}
 			return this.stack.Peek();
 		}
-		public Token.Abstract PushOnStack(Collection.IQueue<Token.Abstract> arguments)
+		public Token.Abstract PushOnStack(Token.Abstract @operator, Collection.IQueue<Token.Abstract> arguments)
 		{
-			Token.Abstract result = null;
+			Token.Abstract result = @operator;
 			if (arguments.Count > 0)
 			{
 				if (arguments.Peek() is Token.Number)
 				{
 					this.stack.Push(new Expression.Number((arguments.Dequeue() as Token.Number).Value));
-					result = PushOnStack(arguments);
+					result = PushOnStack(@operator, arguments);
 				}
 				else if (arguments.Peek() is Token.Variable)
 				{
 					this.stack.Push(new Expression.Variable((arguments.Dequeue() as Token.Variable).Name));
-					result = PushOnStack(arguments);
+					result = PushOnStack(@operator, arguments);
 				}
-				else if (arguments.Peek() is Token.BinaryOperator)
+				else if (arguments.Peek() is Token.BinaryOperator && @operator.IsNull())
 					result = arguments.Dequeue();
+				else if (arguments.Peek() is Token.UnaryOperator)
+				{
+					Abstract value = null;
+					arguments.Dequeue();
+					if (arguments.Peek() is Token.Number)
+						value = new Expression.Number((arguments.Dequeue() as Token.Number).Value);
+					else if (arguments.Peek() is Token.Variable)
+						value = new Expression.Variable((arguments.Dequeue() as Token.Variable).Name);
+					this.stack.Push(new Expression.Negation(value));
+					result = PushOnStack(@operator, arguments);
+				}
 			}
 			return result;
 		}

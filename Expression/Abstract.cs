@@ -80,15 +80,6 @@ namespace Expression
         {
             return new Number(value);
         }
-		//public static implicit operator Abstract(Token.Abstract value)
-		//{
-		//	Abstract temp;
-		//	if (value is Token.Number)
-		//		temp = new Number(float.Parse(val));
-		//	else
-		//		temp = new Variable(value.ToString());
-		//	return temp;
-		//}
         public static explicit operator Abstract(string expression)
         {
 			return new Parser().Parse(expression);

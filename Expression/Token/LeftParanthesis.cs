@@ -9,7 +9,7 @@ namespace Expression.Token
 	public class LeftParanthesis :
 		BinaryOperator
 	{
-		public override int Precedence { get { return 9; } }
+		public override int Precedence { get { return int.MaxValue; } }
 		public override string Symbol { get { return "("; } }
 		public override Expression.BinaryOperator Create(Expression.Abstract left, Expression.Abstract right)
 		{
