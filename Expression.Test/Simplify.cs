@@ -26,7 +26,9 @@ namespace Expression.Test
 				//this.Parsing7,
 				//this.Parsing8,
 				//this.Parsing9,
-				this.Parsing10
+				this.Parsing10,
+                this.Parsing11,
+                this.Parsing12
 				);
 		}
 		[Test]
@@ -152,5 +154,22 @@ namespace Expression.Test
 			Expression.Abstract correct = variable1 + ((Abstract)2 + variable2 / 3) - variable2;
 			Verify(expression, Is.EqualTo(correct));
 		}
+        public void Parsing11()
+        {
+            Expression.Abstract expression = (Expression.Abstract)"x+((-2+y/3)-y)";
+            Expression.Abstract variable1 = new Expression.Variable("x");
+            Expression.Abstract variable2 = new Expression.Variable("y");
+            Expression.Abstract correct = variable1 + ((-(Abstract)2 + variable2 / 3) - variable2);
+            Verify(expression, Is.EqualTo(correct));
+        }
+        public void Parsing12()
+        {
+            Expression.Abstract expression = (Expression.Abstract)"x+((-2+y/3)-y)+2*y-z";
+            Expression.Abstract variable1 = new Expression.Variable("x");
+            Expression.Abstract variable2 = new Expression.Variable("y");
+            Expression.Abstract variable3 = new Expression.Variable("z");
+            Expression.Abstract correct = variable1 + ((-(Abstract)2 + variable2 / 3) - variable2)+(Abstract)2*variable2-variable3;
+            Verify(expression, Is.EqualTo(correct));
+        }
 	}
 }

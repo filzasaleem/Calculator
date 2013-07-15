@@ -22,9 +22,10 @@ namespace Expression
 			Token.Abstract operator2 = null;
 			if (operator1.IsNull())
 				operator1 = this.PushOnStack(operator1, arguments);
-			if (operator2.IsNull())
+			if (operator2.IsNull() && !(operator1 is Token.RightParanthesis))
 				operator2 = this.PushOnStack(operator2, arguments);
-			operator2 = this.PushOnStack(operator2, arguments);
+            if (!(operator1 is Token.RightParanthesis) && !(operator2 is Token.RightParanthesis))
+			    operator2 = this.PushOnStack(operator2, arguments);
 			right = this.stack.Pop();
 			left = this.stack.Pop();
 			if (operator1.NotNull())
@@ -32,10 +33,10 @@ namespace Expression
 				if (operator2.NotNull())
 				{
 					if (operator2 is Token.RightParanthesis)
-						this.stack.Push((operator2 as Token.BinaryOperator).Create(left, right));
+						this.stack.Push((operator1 as Token.BinaryOperator).Create(left, right));
 					else
 					{
-						if (operator1.Precedence < operator2.Precedence)
+                        if (operator1.Precedence < operator2.Precedence && !(operator1 is Token.RightParanthesis))
 							this.stack.Push((operator2 as Token.BinaryOperator).Create(left, right));
 						else if (operator1.Precedence > operator2.Precedence || operator1.Precedence == operator2.Precedence)
 						{
@@ -70,7 +71,7 @@ namespace Expression
 					this.stack.Push(new Expression.Variable((arguments.Dequeue() as Token.Variable).Name));
 					result = PushOnStack(@operator, arguments);
 				}
-				else if ((arguments.Peek() is Token.BinaryOperator || arguments.Peek() is Token.RightParanthesis) && @operator.IsNull())
+                else if (((arguments.Peek() is Token.BinaryOperator && !(arguments.Peek() is Token.LeftParanthesis)) || (arguments.Peek() is Token.RightParanthesis)) && @operator.IsNull())
 					result = arguments.Dequeue();
 				else if (arguments.Peek() is Token.UnaryOperator)
 				{
@@ -87,6 +88,7 @@ namespace Expression
 				{
 					arguments.Dequeue();
 					this.Parse(null, arguments);
+                    result = PushOnStack(result, arguments);
 				}
 			}
 			return result;
