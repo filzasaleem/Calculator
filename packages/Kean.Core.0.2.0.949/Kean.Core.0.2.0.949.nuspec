@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Kean.Core</id>
+    <version>0.2.0.949</version>
+    <title>Kean.Core</title>
+    <authors>simonmika</authors>
+    <owners>simonmika</owners>
+    <iconUrl>https://nugetgallery.blob.core.windows.net/icons/Kean.Core.0.2.0.949.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Kean utility types and methods.</description>
+    <summary>Kean utility types and methods.</summary>
+  </metadata>
+</package>
