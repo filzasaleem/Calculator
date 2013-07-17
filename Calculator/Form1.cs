@@ -17,26 +17,37 @@ namespace Calculator
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Evaluate_Click(object sender, EventArgs e)
         {
             this.textBox1.Text = ((Expression.Abstract)this.textBox1.Text).Evaluate().ToString();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Simplify_Click(object sender, EventArgs e)
         {
             this.textBox1.Text = ((Expression.Abstract)this.textBox1.Text).Simplify().ToString();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Sine_Click(object sender, EventArgs e)
         {
             Expression.Abstract v = (Expression.Abstract)this.textBox1.Text.ToString();
             this.textBox1.Text = new Expression.Sine(v).Evaluate().ToString();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void Derive_Click(object sender, EventArgs e)
         {
             Expression.Abstract z = (Expression.Abstract)this.textBox1.Text.ToString();
             this.textBox1.Text = z.Derive("x").Simplify().ToString();
+        }
+
+        private void Cosine_Click(object sender, EventArgs e)
+        {
+            Expression.Abstract v = (Expression.Abstract)this.textBox1.Text.ToString();
+            this.textBox1.Text = new Expression.Cosine(v).Evaluate().ToString();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
     }
